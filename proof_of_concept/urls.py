@@ -1,5 +1,6 @@
 from django.conf.urls.defaults import patterns, include, url
-import other_app
+from other_app import app
+from trappist import Trappist
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
@@ -10,7 +11,7 @@ extra_patterns = patterns('',
     url(r'^charge/$', 'credit.views.charge', name='credit-charge'),
 )
 
-urlpatterns = patterns('', other_app.trappist.mounted_at('foo')
+urlpatterns = patterns('', Trappist(app).mounted_at('foo')
     # Examples:
     # TODO: Look at passing arguments from Django URLConf to the Flask app.
     # url(r'^foo', include(other_app.trappist.urls)),
