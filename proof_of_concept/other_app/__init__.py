@@ -1,10 +1,7 @@
 from flask import Flask, url_for
 
-app = Flask(__name__)
 
-# TODO:
-#   - Look at how flask generates URLs, and make sure that works when it is now
-#     mounted at a subfolder
+app = Flask(__name__)
 
 
 @app.route('/')

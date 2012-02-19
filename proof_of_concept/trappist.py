@@ -1,4 +1,3 @@
-from werkzeug.wsgi import DispatcherMiddleware
 from django.http import HttpResponse
 from django.conf.urls.defaults import patterns, include, url
 
@@ -11,6 +10,17 @@ class Trappist(object):
     def start_response(self, status, headers):
         pass
 
+    # TODO:
+    #   - Setup project and testing
+    #   - Handle non-200 errors from Flask and propgate to Django
+    #   - Verify more complicated flask things work
+    #     - Blueprints
+    #     - Templates
+    #     - Redirection
+    #     - Static Files
+    #     - Request data
+    #     - Cookie path + cookies
+    #     - Middlewares
     def __run_and_generate_response(self, environ):
         result = self.app(environ, self.start_response)
         return HttpResponse(result)
