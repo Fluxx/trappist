@@ -6,12 +6,7 @@ from trappist import Trappist
 # from django.contrib import admin
 # admin.autodiscover()
 
-extra_patterns = patterns('',
-    url(r'^reports/(?P<id>\d+)/$', 'credit.views.report', name='credit-reports'),
-    url(r'^charge/$', 'credit.views.charge', name='credit-charge'),
-)
-
-urlpatterns = patterns('', Trappist(app).mounted_at('foo')
+urlpatterns = patterns('', Trappist(app).mounted_at('/foo')
     # Examples:
     # TODO: Look at passing arguments from Django URLConf to the Flask app.
     # url(r'^foo', include(other_app.trappist.urls)),

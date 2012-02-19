@@ -11,11 +11,11 @@ class Trappist(object):
         pass
 
     def __call__(self, request, mountpoint):
-        request.environ['PATH_INFO'] = request.environ['PATH_INFO'].lstrip('/' + mountpoint)
+        request.environ['PATH_INFO'] = request.environ['PATH_INFO'].lstrip(mountpoint)
         result = self.app(request.environ, self.start_response)
         return HttpResponse(result)
 
     def mounted_at(self, prefix):
-        regex = r"^%s" % prefix
+        regex = r"^%s" % prefix.lstrip('/')
         pattern = patterns('', url(r'^', self))
         return url(regex, include(pattern), dict(mountpoint=prefix))
