@@ -9,7 +9,6 @@ class Trappist(object):
 
     def mounted_at(self, prefix):
         regex = r"^%s" % prefix.lstrip('/')
-        print regex
         pattern = patterns('', url(r'^', self))
         return url(regex, include(pattern), dict(mountpoint=prefix))
 
