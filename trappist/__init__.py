@@ -35,7 +35,7 @@ class Trappist(object):
         return HttpResponse(result)
 
     def __patch(self, request, mountpoint):
-        patched = request.environ['PATH_INFO'].lstrip(mountpoint)
+        patched = request.environ['PATH_INFO'][len(mountpoint):]
         original_script_name = request.environ.get('SCRIPT_NAME', '')
         request.environ['PATH_INFO'] = patched
         request.environ['SCRIPT_NAME'] = original_script_name + mountpoint
