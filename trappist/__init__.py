@@ -22,17 +22,6 @@ class Trappist(object):
         self.__patch(request, mountpoint)
         return self.__run_and_generate_response(request.environ)
 
-    # TODO:
-    #   - Setup project and testing
-    #   - Handle non-200 errors from Flask and propgate to Django
-    #   - Verify more complicated flask things work
-    #     - Blueprints
-    #     - Templates
-    #     - Redirection
-    #     - Static Files
-    #     - Request data
-    #     - Cookie path + cookies
-    #     - Middlewares
     def __run_and_generate_response(self, environ):
         status_headers = [None, None]
 

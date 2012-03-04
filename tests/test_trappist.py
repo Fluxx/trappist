@@ -120,3 +120,16 @@ class TestTrappist(unittest.TestCase):
         self.trappist = Trappist(app)
         response = self.call(path='/mnt/make-header/Content-Type/text/xml')
         eq_(response['Content-type'], 'text/xml')
+
+    def test_propogates_redirects_to_django(self):
+        self.trappist = Trappist(app)
+        response = self.call(path='/mnt/redirect_to_google/301')
+        eq_(response['Location'], 'http://www.google.com')
+        eq_(response.status_code, 301)
+
+    def test_sends_static_files(self):
+        self.trappist = Trappist(app)
+        response = self.call(path='/mnt/download')
+        eq_(response['Content-Disposition'], 'attachment; filename=ewok.jpg')
+        eq_(response['Content-Length'], '66328')
+        eq_(len(response.content), 66328)

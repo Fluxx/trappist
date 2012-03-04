@@ -1,5 +1,15 @@
-from flask import Flask, abort, make_response
+import os
+from flask import Flask, abort, make_response, redirect, send_from_directory
 app = Flask(__name__)
+
+
+# TODO:
+#   - Verify more complicated flask things work
+#     - Blueprints
+#     - Templates
+#     - Request data
+#     - Cookie path + cookies
+#     - Middlewares
 
 
 @app.route('/string')
@@ -29,6 +39,17 @@ def make_500():
 
 @app.route('/make-header/<key>/<path:value>')
 def make_header(key, value):
-    response = make_response('not found', 500)
+    response = make_response()
     response.headers[key] = value
     return response
+
+
+@app.route('/redirect_to_google/<int:status>')
+def redirect_to_google(status):
+    return redirect('http://www.google.com', status)
+
+
+@app.route('/download')
+def download():
+    test_app_dir = os.path.abspath(os.path.dirname(__file__))
+    return send_from_directory(test_app_dir, 'ewok.jpg', as_attachment=True)
