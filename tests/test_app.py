@@ -5,10 +5,6 @@ app = Flask(__name__)
 
 # TODO:
 #   - Verify more complicated flask things work
-#     - Blueprints
-#     - Templates
-#     - Request data
-#     - Cookie path + cookies
 #     - Middlewares
 
 

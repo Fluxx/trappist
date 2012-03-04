@@ -82,6 +82,11 @@ class TestTrappist(unittest.TestCase):
     def test_monted_at_added_mounted_at_kw_arg_with_passed_prefix(self):
         eq_(self.mounted_at.default_kwargs, dict(mountpoint='/mnt'))
 
+    def test_mounted_at_sets_application_root_to_mountpoint(self):
+        trappist = Trappist(app)
+        trappist.mounted_at('/mnt')
+        eq_(trappist.app.config['APPLICATION_ROOT'], '/mnt')
+
     def test_created_resolver_with_self_as_callback(self):
         eq_(len(self.mounted_at.urlconf_name), 1)
         eq_(self.mounted_at.urlconf_name[0].callback, self.trappist)

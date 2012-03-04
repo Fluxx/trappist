@@ -13,6 +13,7 @@ class Trappist(object):
     def mounted_at(self, prefix):
         regex = r"^%s" % prefix.lstrip('/')
         pattern = patterns('', url(r'^', self))
+        self.app.config.update(APPLICATION_ROOT=prefix)
         return url(regex, include(pattern), dict(mountpoint=prefix))
 
     def start_response(status, headers):
