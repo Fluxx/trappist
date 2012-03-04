@@ -13,10 +13,33 @@ from trappist import Trappist
 from test_app import app
 
 
+class fixture(object):
+    """
+    Works like the built in @property decorator, except that it caches the
+    return value for each instance.  This allows you to lazy-load the fixture
+    only if your test needs it, rather than having it setup before *every* test
+    when put in the setUp() method or returning a fresh run of the decorated
+    method, which 99% of the time isn't what you want.
+    """
+
+    def __init__(self, func):
+        self.func = func
+        self.cache = {}
+
+    def __call__(self, *args):
+        try:
+            return self.cache[args]
+        except KeyError:
+            self.cache[args] = self.func(*args)
+            return self.cache[args]
+
+    def __get__(self, instance, klass):
+        return self.__call__(instance)
+
+
 class TestTrappist(unittest.TestCase):
 
     def setUp(self):
-        self.mock_app = mock.Mock()
         self.trappist = Trappist(self.mock_app)
         self.req_factory = RequestFactory()
 
@@ -27,7 +50,15 @@ class TestTrappist(unittest.TestCase):
     def request(self, path='/mnt'):
         return self.req_factory.get(path)
 
-    @property
+    def mock_app_called(self, environ, start_response):
+        start_response('200 OK', {})
+        return ['hello world']
+
+    @fixture
+    def mock_app(self):
+        return mock.Mock(side_effect=self.mock_app_called)
+
+    @fixture
     def mounted_at(self):
         return self.trappist.mounted_at('/mnt')
 
@@ -59,7 +90,6 @@ class TestTrappist(unittest.TestCase):
         ok_(self.trappist(self.req_factory.get('/mnt'), mountpoint='/mnt'))
 
     def test_patches_environment_path_info_and_script_name_to_remove_mount(self):
-        self.trappist.app = mock.Mock()
         self.call(path='/mnt/another/path')
         args, kwargs = self.trappist.app.call_args
 
@@ -67,7 +97,6 @@ class TestTrappist(unittest.TestCase):
         eq_(args[0]['SCRIPT_NAME'], '/mnt')
 
     def test_calls_with_patched_environment(self):
-        self.trappist.app = mock.Mock()
         request = self.request('/mnt/another/path')
         self.call(request)
         called_environ = self.trappist.app.call_args[0][0]
@@ -88,4 +117,6 @@ class TestTrappist(unittest.TestCase):
         eq_(response.status_code, 500)
 
     def test_passes_content_type_to_http_response(self):
-        fail
+        self.trappist = Trappist(app)
+        response = self.call(path='/mnt/make-header/Content-Type/text/xml')
+        eq_(response['Content-type'], 'text/xml')

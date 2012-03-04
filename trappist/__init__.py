@@ -37,17 +37,18 @@ class Trappist(object):
         status_headers = [None, None]
 
         def start_response(status, headers):
-            # Convert the string statu to a number
             match = self.STATUS_INT.search(status)
             status_headers[:] = [int(match.group()), headers]
 
         body = self.app(environ, start_response)
         status, headers = status_headers
-        print headers
-        # Args to handle
-        # - mimetype
-        # - content_type
-        return HttpResponse(body, status=status)
+
+        response = HttpResponse(body, status=status)
+
+        for key, value in headers:
+            response[key] = value
+
+        return response
 
     def __patch(self, request, mountpoint):
         patched = request.environ['PATH_INFO'][len(mountpoint):]

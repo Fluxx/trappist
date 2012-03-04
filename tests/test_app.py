@@ -25,3 +25,10 @@ def raise_500():
 @app.route('/500/make_request')
 def make_500():
     return make_response('not found', 500)
+
+
+@app.route('/make-header/<key>/<path:value>')
+def make_header(key, value):
+    response = make_response('not found', 500)
+    response.headers[key] = value
+    return response
