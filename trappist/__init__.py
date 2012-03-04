@@ -1,8 +1,11 @@
 from django.http import HttpResponse
 from django.conf.urls.defaults import patterns, include, url
+import re
 
 
 class Trappist(object):
+
+    STATUS_INT = re.compile('^\d+')
 
     def __init__(self, app):
         self.app = app
@@ -12,7 +15,7 @@ class Trappist(object):
         pattern = patterns('', url(r'^', self))
         return url(regex, include(pattern), dict(mountpoint=prefix))
 
-    def start_response(self, status, headers):
+    def start_response(status, headers):
         pass
 
     def __call__(self, request, mountpoint):
@@ -31,8 +34,20 @@ class Trappist(object):
     #     - Cookie path + cookies
     #     - Middlewares
     def __run_and_generate_response(self, environ):
-        result = self.app(environ, self.start_response)
-        return HttpResponse(result)
+        status_headers = [None, None]
+
+        def start_response(status, headers):
+            # Convert the string statu to a number
+            match = self.STATUS_INT.search(status)
+            status_headers[:] = [int(match.group()), headers]
+
+        body = self.app(environ, start_response)
+        status, headers = status_headers
+        print headers
+        # Args to handle
+        # - mimetype
+        # - content_type
+        return HttpResponse(body, status=status)
 
     def __patch(self, request, mountpoint):
         patched = request.environ['PATH_INFO'][len(mountpoint):]
