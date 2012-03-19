@@ -18,7 +18,7 @@ setup(
     license = "MIT",
     keywords = "django flask http mount",
     url = "https://github.com/Fluxx/trappist",
-    packages=['trappist', 'tests'],
+    py_modules = ['trappist'],
     long_description=read('README.rst'),
     classifiers=[
         "Development Status :: 3 - Alpha",
