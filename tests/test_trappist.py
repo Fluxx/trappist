@@ -68,6 +68,10 @@ class TestTrappist(unittest.TestCase):
     def test_init_takes_app(self):
         eq_(Trappist(self.mock_app).app, self.mock_app)
 
+    def test_mounted_at_with_improper_string_raises_valueerror(self):
+        assert_raises_regexp(ValueError, 'invalid prefix format',
+                             Trappist(self.mock_app).mounted_at, 'foo')
+
     def test_mounted_at_returns_django_regex_url_resolver(self):
         assert_is_instance(self.mounted_at, RegexURLResolver)
 

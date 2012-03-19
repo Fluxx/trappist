@@ -11,10 +11,10 @@ def read(fname):
 
 setup(
     name = "trappist",
-    version = "0.1.0",
+    version = "0.1.1",
     author = "Jeff Pollard",
     author_email = "jeff.pollard@gmail.com",
-    description = ("Mount your Flask app inside your Django app."),
+    description = ("Mount your Flask or WSGI app in your Django app."),
     license = "MIT",
     keywords = "django flask http mount",
     url = "https://github.com/Fluxx/trappist",

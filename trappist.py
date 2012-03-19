@@ -11,8 +11,7 @@ class Trappist(object):
         self.app = app
 
     def mounted_at(self, prefix):
-        regex = r"^%s" % prefix.lstrip('/')
-        pattern = patterns('', url(r'^', self))
+        regex, pattern = self.__regex_and_pattern_from(prefix)
         self.app.config.update(APPLICATION_ROOT=prefix)
         return url(regex, include(pattern), dict(mountpoint=prefix))
 
@@ -45,3 +44,11 @@ class Trappist(object):
         original_script_name = request.environ.get('SCRIPT_NAME', '')
         request.environ['PATH_INFO'] = patched
         request.environ['SCRIPT_NAME'] = original_script_name + mountpoint
+
+    def __regex_and_pattern_from(self, prefix):
+        if not prefix.startswith('/'):
+            raise ValueError('"%s" is an invalid prefix format' % prefix)
+
+        regex = r"^%s" % prefix.lstrip('/')
+        pattern = patterns('', url(r'^', self))
+        return (regex, pattern)
