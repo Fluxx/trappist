@@ -1,12 +1,9 @@
+**Note: This project is unmaintanined an no longer released on Pypi.**
+
 Trappist
 ========
 
 Trappist is a Python library which allows you to mount your Flask or other WSGI application inside of your Django application.  It translates a call to a "Django view" to a call to a WSGI, and handles the translation of the Flask app response back as a Django `HttpResponse` object.
-
-Installation
-============
-
-Trappist is hosted on Pypi, so a simple ``pip install trappist`` or ``easy_install trappist`` should do the trick.
 
 Usage
 =====
