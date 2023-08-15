@@ -15,7 +15,7 @@ tests_require = [
 ]
 
 requires = [
-    'Flask==0.10.1',
+    'Flask==1.0',
     'django>=1.4',
 ]
 
